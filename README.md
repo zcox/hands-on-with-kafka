@@ -41,6 +41,8 @@ docker-compose kill && docker-compose rm --force
 ## Running Kafka
 
 - examine docker-compose.yml
+- Zookeeper
+- Kafka cluster = multiple Kafka brokers
 
 ## Serialization/Deserialization
 
@@ -91,7 +93,27 @@ To view Avro schema in Registry: `curl http://192.168.59.103:8081/subjects/basic
 
 ![](img/consumer7b.png)
 
+***
+
+![](img/kafka3.png)
+
+***
+
+![](img/kafka4.png)
+
 ## Replicas
+
+- each partition has 1 or more replicas
+- replicas provide data replication (duh)
+- producer sends messages to leader replica
+- follower replicas consume from leader replica
+- tunable consistency
+
+![](img/kafka5.png)
+
+***
+
+![](img/kafka6.png)
 
 ## Example: Application Events
 
@@ -100,6 +122,10 @@ To view Avro schema in Registry: `curl http://192.168.59.103:8081/subjects/basic
 ## Example: Change Data Capture
 
 ## Fault Tolerance
+
+- broker stops
+- broker dies
+- broker loses data
 
 ## Performance Testing
 
