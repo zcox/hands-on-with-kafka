@@ -1,6 +1,7 @@
 # Hands-On With Kafka
 
 [Zach Cox](http://theza.ch)
+
 [Iowa Code Camp Spring 2015](http://iowacodecamp.com)
 
 ## Running Examples
@@ -57,13 +58,37 @@ To view Avro schema in Registry: `curl http://192.168.59.103:8081/subjects/basic
 - messages in partition go to same consumer
 
 ![](img/consumer1.png)
+
+***
+
 ![](img/consumer2.png)
+
+***
+
 ![](img/consumer3.png)
+
+***
+
 ![](img/consumer4.png)
+
+***
+
 ![](img/consumer5.png)
+
+***
+
 ![](img/consumer6.png)
+
+***
+
 ![](img/consumer6b.png)
+
+***
+
 ![](img/consumer7.png)
+
+***
+
 ![](img/consumer7b.png)
 
 ## Replicas
