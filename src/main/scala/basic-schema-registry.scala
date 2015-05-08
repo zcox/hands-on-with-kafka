@@ -6,32 +6,6 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import kafka.consumer.{Consumer, ConsumerConfig, KafkaStream}
 import io.confluent.kafka.serializers.KafkaAvroDecoder
 import kafka.utils.VerifiableProperties
-import org.apache.avro.Schema
-import org.apache.avro.generic.{GenericRecord, GenericData}
-
-case class BasicMessage(producerName: String, count: Int)
-
-//TODO could probably make T => GenericRecord and GenericRecord => T much more reusable for any case class/Product type T
-trait GenericRecordConverter[T] {
-  def toGenericRecord(t: T): GenericRecord
-  def fromGenericRecord(record: GenericRecord): T
-}
-
-object BasicMessageConverter extends GenericRecordConverter[BasicMessage] {
-  val schemaString = """{"type":"record","name":"BasicMessage","fields":[{"name":"producerName","type":"string"}, {"name":"count","type":"int"}]}"""
-  val parser = new Schema.Parser()
-  val schema = parser.parse(schemaString)
-
-  def toGenericRecord(message: BasicMessage): GenericRecord = {
-    val record = new GenericData.Record(schema)
-    record.put("producerName", message.producerName)
-    record.put("count", message.count)
-    record
-  }
-
-  def fromGenericRecord(record: GenericRecord): BasicMessage = 
-    BasicMessage(record.get("producerName").toString, record.get("count").asInstanceOf[Int])
-}
 
 object BasicProducing extends App {
   //http://kafka.apache.org/documentation.html#newproducerconfigs
@@ -54,8 +28,11 @@ object BasicProducing extends App {
   var count = 0
   while (true) {
     count += 1
-    val message = BasicMessage(producerName, count)
-    val record = new ProducerRecord[Object, Object](topic, BasicMessageConverter.toGenericRecord(message))
+    val message = BasicMessage.newBuilder //generated from src/main/avro/BasicMessage.avsc
+      .setProducerName(producerName)
+      .setCount(count)
+      .build
+    val record = new ProducerRecord[Object, Object](topic, message) //message is a SpecificRecord, which KafkaAvroSerializer knows how to serialize
     producer.send(record)
     println(s"$producerName sent to $topic: $message")
     Thread.sleep(1000)
@@ -70,6 +47,7 @@ object BasicConsuming extends App {
   props.put("offsets.storage", "kafka")
   props.put("dual.commit.enabled", "false")
   props.put("schema.registry.url", "http://192.168.59.103:8081")
+  props.put("specific.avro.reader", "true") //need this so that messageAndMetadata.message is a BasicMessage, not a GenericRecord
 
   val vProps = new VerifiableProperties(props)
   val keyDecoder = new KafkaAvroDecoder(vProps)
@@ -84,8 +62,8 @@ object BasicConsuming extends App {
     val iterator = stream.iterator
     while (iterator.hasNext) {
       val messageAndMetadata = iterator.next
-      val message = BasicMessageConverter.fromGenericRecord(messageAndMetadata.message.asInstanceOf[GenericRecord])
-      println(s"$consumerName received from $topic: BasicMessage[producerName=${message.producerName}, count=${message.count}]")
+      val message = messageAndMetadata.message.asInstanceOf[BasicMessage] //KafkaAvroDecoder deserializes right to our message case class type
+      println(s"$consumerName received from $topic: BasicMessage[producerName=${message.getProducerName}, count=${message.getCount}]")
     }
     println(s"$consumerName finished consuming from $topic")
   }

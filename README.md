@@ -1,8 +1,19 @@
 # Hands-On With Kafka
 
-[Zach Cox](http://theza.ch)
+Zach Cox | [@zcox](https://twitter.com/zcox) | http://theza.ch
+
+[Banno](https://banno.com) | [Jack Henry & Associates](https://www.jackhenry.com)
 
 [Iowa Code Camp Spring 2015](http://iowacodecamp.com)
+
+## Worth Reading
+
+- [Kafka docs](http://kafka.apache.org/documentation.html)
+- [I ♡ Logs](http://shop.oreilly.com/product/0636920034339.do)
+- [Confluent Platform](http://confluent.io/product/)
+- [Confluent Platform docs](http://confluent.io/docs/current/index.html)
+- http://blog.confluent.io/2015/02/25/stream-data-platform-1/
+- http://blog.confluent.io/2015/02/25/stream-data-platform-2/
 
 ## Running Examples
 
@@ -121,6 +132,8 @@ To view Avro schema in Registry: `curl http://192.168.59.103:8081/subjects/basic
 
 ## Example: Change Data Capture
 
+- http://blog.confluent.io/2015/04/23/bottled-water-real-time-integration-of-postgresql-and-kafka/
+
 ## Fault Tolerance
 
 - broker stops
@@ -129,8 +142,4 @@ To view Avro schema in Registry: `curl http://192.168.59.103:8081/subjects/basic
 
 ## Performance Testing
 
-## References
-
-- [Kafka docs](http://kafka.apache.org/documentation.html)
-- [I ♡ Logs](http://shop.oreilly.com/product/0636920034339.do)
-- [Confluent Platform docs](http://confluent.io/docs/current/index.html)
+- http://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines

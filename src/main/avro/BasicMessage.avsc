@@ -1,0 +1,15 @@
+{
+  "namespace": "basic.schema.registry",
+  "type": "record",
+  "name": "BasicMessage",
+  "fields": [
+    {
+      "name": "producerName",
+      "type": "string"
+    },
+    {
+      "name": "count",
+      "type": "int"
+    }
+  ]
+}

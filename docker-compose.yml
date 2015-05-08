@@ -49,7 +49,18 @@ schemaregistry:
   links:
     - zookeeper
 
-# postgres
-# bottledwater
+postgres:
+  # image: confluent/postgres-bw:0.1
+  build: ./postgres
+  ports:
+    - "5432:5432"
+
+bottledwater:
+  image: confluent/bottledwater:0.1
+  links:
+    - postgres
+    - kafka1:kafka
+    - schemaregistry:schema-registry
+
 # redis
 # elasticsearch
