@@ -23,6 +23,8 @@ To run all of the infrastructure:
 docker-compose up -d
 ```
 
+![](img/boot2docker.png)
+
 To run one of the code examples:
 
 ```
@@ -126,6 +128,18 @@ To view Avro schema in Registry: `curl http://192.168.59.103:8081/subjects/basic
 
 ![](img/kafka6.png)
 
+```
+bin/kafka-topics.sh --zookeeper 192.168.59.103:2181 --describe
+```
+
+## Retention
+
+- messages don't stay in topics forever
+- time (e.g. 7 days)
+- space (e.g. 10GB)
+- key (e.g. log compaction, most recent message per-key)
+- none of the above (?)
+
 ## Example: Application Events
 
 ## Example: Logging
@@ -136,10 +150,27 @@ To view Avro schema in Registry: `curl http://192.168.59.103:8081/subjects/basic
 
 ## Fault Tolerance
 
-- broker stops
-- broker dies
-- broker loses data
+- broker stops cleanly (e.g. config change, version upgrade, maintenance)
+  - `doc stop kafka1` => SIGTERM
+  - replica leadership transferred to other brokers before shutdown
+  - producers & consumers change to new leader replicas
+  - application never notices: no exceptions, no lost messages
+- broker dies (e.g. OOM, runtime exception, bug)
+  - `doc kill kafka1` => SIGKILL
+  - replicas leadership fails over to other brokers "quickly"
+  - producers & consumers change to new leaders "quickly"
+  - application notices: error logs, maybe lost messages (retries)
+- restore stopped/dead broker
+  - replicas get back in-sync
+  - broker regains leadership
+- broker loses data (e.g. delete kafka logs dir)
+  - `sudo rm -rf /mnt/sda1/kafka/kafka-logs-1` #oops!
+  - should be roughly same as broker dying
+  - after broker restart: logs dir should backfill, broker should regain leadership
 
 ## Performance Testing
 
+![](img/kafka-linkedin-stats.png)
+
 - http://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines
+- https://github.com/jamiealquiza/sangrenel

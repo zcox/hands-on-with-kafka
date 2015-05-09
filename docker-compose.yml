@@ -9,12 +9,17 @@ kafka1:
     - "9092:9092"
   links: 
     - zookeeper:zk
+  volumes:
+    - /mnt/sda1/kafka:/kafka
   environment:
     KAFKA_BROKER_ID: 1
     KAFKA_ADVERTISED_HOST_NAME: 192.168.59.103
     KAFKA_ADVERTISED_PORT: 9092
     KAFKA_NUM_PARTITIONS: 3
     KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+    KAFKA_DELETE_TOPIC_ENABLE: "true"
+    KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: 1 #simplifies demo, do not use!
+    KAFKA_LEADER_IMBALANCE_CHECK_INTERVAL_SECONDS: 10 #makes demo snappier, do not use!
 
 kafka2:
   image: wurstmeister/kafka:0.8.2.1
@@ -22,12 +27,17 @@ kafka2:
     - "9093:9092"
   links: 
     - zookeeper:zk
+  volumes:
+    - /mnt/sda1/kafka:/kafka
   environment:
     KAFKA_BROKER_ID: 2
     KAFKA_ADVERTISED_HOST_NAME: 192.168.59.103
     KAFKA_ADVERTISED_PORT: 9093
     KAFKA_NUM_PARTITIONS: 3
     KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+    KAFKA_DELETE_TOPIC_ENABLE: "true"
+    KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: 1 #simplifies demo, do not use!
+    KAFKA_LEADER_IMBALANCE_CHECK_INTERVAL_SECONDS: 10 #makes demo snappier, do not use!
 
 kafka3:
   image: wurstmeister/kafka:0.8.2.1
@@ -35,12 +45,17 @@ kafka3:
     - "9094:9092"
   links: 
     - zookeeper:zk
+  volumes:
+    - /mnt/sda1/kafka:/kafka
   environment:
     KAFKA_BROKER_ID: 3
     KAFKA_ADVERTISED_HOST_NAME: 192.168.59.103
     KAFKA_ADVERTISED_PORT: 9094
     KAFKA_NUM_PARTITIONS: 3
     KAFKA_DEFAULT_REPLICATION_FACTOR: 2
+    KAFKA_DELETE_TOPIC_ENABLE: "true"
+    KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: 1 #simplifies demo, do not use!
+    KAFKA_LEADER_IMBALANCE_CHECK_INTERVAL_SECONDS: 10 #makes demo snappier, do not use!
 
 schemaregistry:
   image: confluent/schema-registry:latest
