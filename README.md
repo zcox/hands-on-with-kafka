@@ -23,8 +23,6 @@ To run all of the infrastructure:
 docker-compose up -d
 ```
 
-![](img/boot2docker.png)
-
 To run one of the code examples:
 
 ```
@@ -56,6 +54,8 @@ docker-compose kill && docker-compose rm --force
 - examine docker-compose.yml
 - Zookeeper
 - Kafka cluster = multiple Kafka brokers
+
+![](img/boot2docker.png)
 
 ## Serialization/Deserialization
 
